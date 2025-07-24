@@ -25,24 +25,27 @@ export const mcpActivationEvent = (contributedCollectionId: string) =>
 	mcpActivationEventPrefix + contributedCollectionId;
 
 export const enum DiscoverySource {
-	ClaudeDesktop = 'claude-desktop',
-	Windsurf = 'windsurf',
-	CursorGlobal = 'cursor-global',
-	CursorWorkspace = 'cursor-workspace',
+        ClaudeDesktop = 'claude-desktop',
+        Windsurf = 'windsurf',
+        CursorGlobal = 'cursor-global',
+        CursorWorkspace = 'cursor-workspace',
+       Ollama = 'ollama',
 }
 
 export const allDiscoverySources = Object.keys({
-	[DiscoverySource.ClaudeDesktop]: true,
-	[DiscoverySource.Windsurf]: true,
-	[DiscoverySource.CursorGlobal]: true,
-	[DiscoverySource.CursorWorkspace]: true,
+        [DiscoverySource.ClaudeDesktop]: true,
+        [DiscoverySource.Windsurf]: true,
+        [DiscoverySource.CursorGlobal]: true,
+        [DiscoverySource.CursorWorkspace]: true,
+       [DiscoverySource.Ollama]: true,
 } satisfies Record<DiscoverySource, true>) as DiscoverySource[];
 
 export const discoverySourceLabel: Record<DiscoverySource, string> = {
-	[DiscoverySource.ClaudeDesktop]: localize('mcp.discovery.source.claude-desktop', "Claude Desktop"),
-	[DiscoverySource.Windsurf]: localize('mcp.discovery.source.windsurf', "Windsurf"),
-	[DiscoverySource.CursorGlobal]: localize('mcp.discovery.source.cursor-global', "Cursor (Global)"),
-	[DiscoverySource.CursorWorkspace]: localize('mcp.discovery.source.cursor-workspace', "Cursor (Workspace)"),
+        [DiscoverySource.ClaudeDesktop]: localize('mcp.discovery.source.claude-desktop', "Claude Desktop"),
+        [DiscoverySource.Windsurf]: localize('mcp.discovery.source.windsurf', "Windsurf"),
+        [DiscoverySource.CursorGlobal]: localize('mcp.discovery.source.cursor-global', "Cursor (Global)"),
+        [DiscoverySource.CursorWorkspace]: localize('mcp.discovery.source.cursor-workspace', "Cursor (Workspace)"),
+       [DiscoverySource.Ollama]: localize('mcp.discovery.source.ollama', "Ollama"),
 };
 
 export const mcpConfigurationSection = 'mcp';

@@ -75,3 +75,60 @@ export class CursorWorkspaceMcpDiscoveryAdapter extends FilesystemMcpDiscovery i
 		));
 	}
 }
+
+export class OllamaWorkspaceMcpDiscoveryAdapter extends FilesystemMcpDiscovery implements IMcpDiscovery {
+       private readonly _collections = this._register(new DisposableMap<string, IDisposable>());
+
+       constructor(
+               @IFileService fileService: IFileService,
+               @IWorkspaceContextService private readonly _workspaceContextService: IWorkspaceContextService,
+               @IMcpRegistry mcpRegistry: IMcpRegistry,
+               @IConfigurationService configurationService: IConfigurationService,
+               @IRemoteAgentService private readonly _remoteAgentService: IRemoteAgentService,
+       ) {
+               super(configurationService, fileService, mcpRegistry);
+       }
+
+       start(): void {
+               this._register(this._workspaceContextService.onDidChangeWorkspaceFolders(e => {
+                       for (const removed of e.removed) {
+                               this._collections.deleteAndDispose(removed.uri.toString());
+                       }
+                       for (const added of e.added) {
+                               this.watchFolder(added);
+                       }
+               }));
+
+               for (const folder of this._workspaceContextService.getWorkspace().folders) {
+                       this.watchFolder(folder);
+               }
+       }
+
+       private watchFolder(folder: IWorkspaceFolder) {
+               const configFile = joinPath(folder.uri, '.ollama', 'mcp.json');
+               const collection: WritableMcpCollectionDefinition = {
+                       id: `ollama-workspace.${folder.index}`,
+                       label: `${folder.name}/.ollama/mcp.json`,
+                       remoteAuthority: this._remoteAgentService.getConnection()?.remoteAuthority || null,
+                       scope: StorageScope.WORKSPACE,
+                       isTrustedByDefault: false,
+                       serverDefinitions: observableValue(this, []),
+                       configTarget: ConfigurationTarget.WORKSPACE_FOLDER,
+                       presentation: {
+                               origin: configFile,
+                               order: McpCollectionSortOrder.WorkspaceFolder + 1,
+                       },
+               };
+
+               this._collections.set(folder.uri.toString(), this.watchFile(
+                       URI.joinPath(folder.uri, '.ollama', 'mcp.json'),
+                       collection,
+                       DiscoverySource.Ollama,
+                       contents => {
+                               const defs = claudeConfigToServerDefinition(collection.id, contents, folder.uri);
+                               defs?.forEach(d => d.roots = [folder.uri]);
+                               return defs;
+                       }
+               ));
+       }
+}

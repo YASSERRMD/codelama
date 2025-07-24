@@ -22,7 +22,7 @@ import { DiscoverySource, discoverySourceLabel, mcpDiscoverySection } from '../m
 import { IMcpRegistry } from '../mcpRegistryTypes.js';
 import { McpCollectionDefinition, McpCollectionSortOrder, McpServerDefinition } from '../mcpTypes.js';
 import { IMcpDiscovery } from './mcpDiscovery.js';
-import { ClaudeDesktopMpcDiscoveryAdapter, CursorDesktopMpcDiscoveryAdapter, NativeMpcDiscoveryAdapter, WindsurfDesktopMpcDiscoveryAdapter } from './nativeMcpDiscoveryAdapters.js';
+import { ClaudeDesktopMpcDiscoveryAdapter, CursorDesktopMpcDiscoveryAdapter, NativeMpcDiscoveryAdapter, WindsurfDesktopMpcDiscoveryAdapter, OllamaDesktopMpcDiscoveryAdapter } from './nativeMcpDiscoveryAdapters.js';
 
 export type WritableMcpCollectionDefinition = McpCollectionDefinition & { serverDefinitions: ISettableObservable<readonly McpServerDefinition[]> };
 
@@ -113,12 +113,13 @@ export abstract class NativeFilesystemMcpDiscovery extends FilesystemMcpDiscover
 			this.suffix = ' ' + localize('onRemoteLabel', ' on {0}', labelService.getHostLabel(Schemas.vscodeRemote, remoteAuthority));
 		}
 
-		this.adapters = [
-			instantiationService.createInstance(ClaudeDesktopMpcDiscoveryAdapter, remoteAuthority),
-			instantiationService.createInstance(CursorDesktopMpcDiscoveryAdapter, remoteAuthority),
-			instantiationService.createInstance(WindsurfDesktopMpcDiscoveryAdapter, remoteAuthority),
-		];
-	}
+                this.adapters = [
+                        instantiationService.createInstance(ClaudeDesktopMpcDiscoveryAdapter, remoteAuthority),
+                        instantiationService.createInstance(CursorDesktopMpcDiscoveryAdapter, remoteAuthority),
+                        instantiationService.createInstance(WindsurfDesktopMpcDiscoveryAdapter, remoteAuthority),
+                        instantiationService.createInstance(OllamaDesktopMpcDiscoveryAdapter, remoteAuthority),
+                ];
+        }
 
 	public abstract start(): void;
 
