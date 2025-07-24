@@ -97,14 +97,27 @@ export class WindsurfDesktopMpcDiscoveryAdapter extends ClaudeDesktopMpcDiscover
 }
 
 export class CursorDesktopMpcDiscoveryAdapter extends ClaudeDesktopMpcDiscoveryAdapter {
-	public override readonly discoverySource: DiscoverySource = DiscoverySource.CursorGlobal;
+        public override readonly discoverySource: DiscoverySource = DiscoverySource.CursorGlobal;
 
 	constructor(remoteAuthority: string | null) {
 		super(remoteAuthority);
 		this.id = `cursor.${this.remoteAuthority}`;
 	}
 
-	override getFilePath({ homedir }: INativeMcpDiscoveryData): URI | undefined {
-		return URI.joinPath(homedir, '.cursor', 'mcp.json');
-	}
+        override getFilePath({ homedir }: INativeMcpDiscoveryData): URI | undefined {
+                return URI.joinPath(homedir, '.cursor', 'mcp.json');
+        }
+}
+
+export class OllamaDesktopMpcDiscoveryAdapter extends ClaudeDesktopMpcDiscoveryAdapter {
+       public override readonly discoverySource: DiscoverySource = DiscoverySource.Ollama;
+
+       constructor(remoteAuthority: string | null) {
+               super(remoteAuthority);
+               this.id = `ollama.${this.remoteAuthority}`;
+       }
+
+       override getFilePath({ homedir }: INativeMcpDiscoveryData): URI | undefined {
+               return URI.joinPath(homedir, '.ollama', 'mcp.json');
+       }
 }

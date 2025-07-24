@@ -18,7 +18,7 @@ import { ExtensionMcpDiscovery } from '../common/discovery/extensionMcpDiscovery
 import { InstalledMcpServersDiscovery } from '../common/discovery/installedMcpServersDiscovery.js';
 import { mcpDiscoveryRegistry } from '../common/discovery/mcpDiscovery.js';
 import { RemoteNativeMpcDiscovery } from '../common/discovery/nativeMcpRemoteDiscovery.js';
-import { CursorWorkspaceMcpDiscoveryAdapter } from '../common/discovery/workspaceMcpDiscoveryAdapter.js';
+import { CursorWorkspaceMcpDiscoveryAdapter, OllamaWorkspaceMcpDiscoveryAdapter } from '../common/discovery/workspaceMcpDiscoveryAdapter.js';
 import { McpCommandIds } from '../common/mcpCommandIds.js';
 import { mcpServerSchema } from '../common/mcpConfiguration.js';
 import { McpContextKeysController } from '../common/mcpContextKeys.js';
@@ -52,6 +52,7 @@ mcpDiscoveryRegistry.register(new SyncDescriptor(RemoteNativeMpcDiscovery));
 mcpDiscoveryRegistry.register(new SyncDescriptor(InstalledMcpServersDiscovery));
 mcpDiscoveryRegistry.register(new SyncDescriptor(ExtensionMcpDiscovery));
 mcpDiscoveryRegistry.register(new SyncDescriptor(CursorWorkspaceMcpDiscoveryAdapter));
+mcpDiscoveryRegistry.register(new SyncDescriptor(OllamaWorkspaceMcpDiscoveryAdapter));
 
 registerWorkbenchContribution2('mcpDiscovery', McpDiscovery, WorkbenchPhase.AfterRestored);
 registerWorkbenchContribution2('mcpContextKeys', McpContextKeysController, WorkbenchPhase.BlockRestore);
